@@ -1,3 +1,7 @@
+---
+const { isLoggedIn } = Astro.locals;
+---
+
 <!-- component -->
 <nav class="flex justify-between px-20 py-10 items-center bg-white">
   <h1 class="text-xl text-gray-800 font-bold">Astro Auth</h1>
@@ -6,15 +10,26 @@
       <li class="font-semibold text-gray-700">
         <a href="/">Home</a>
       </li>
-      <li class="font-semibold text-gray-700">
+
+
+      {
+        isLoggedIn ? (
+
+              <li class="font-semibold text-gray-700">
         <a href="/protected">Protegido</a>
       </li>
-      <li class="font-semibold text-gray-700">
-        <a href="/login">Ingresar</a>
-      </li>
-      <li class="font-semibold text-gray-700">
-        <a href="#">Salir</a>
-      </li>
+          <li
+            id="logout"
+            class="font-semibold text-gray-700"
+          >
+            <a href="#"> Salir</a>
+          </li>
+        ) : (
+          <li class="font-semibold text-gray-700">
+            <a href="/login">Ingresar</a>
+          </li>
+        )
+      }
 
       <li>
         <svg
@@ -51,3 +66,14 @@
     </ul>
   </div>
 </nav>
+
+<script>
+  import { actions } from "astro:actions";
+
+  const logOutbtn = document.querySelector("#logout") as HTMLLIElement;
+
+  logOutbtn?.addEventListener("click", async (e) => {
+    actions.logOut();
+    window.location.replace("/");
+  });
+</script>
